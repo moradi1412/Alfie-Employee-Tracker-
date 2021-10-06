@@ -25,7 +25,7 @@ const promptUser = () => {
     }). then( answer => { 
       console.log(answer.choices); 
       if (answer = 'view all employees') { 
-        db.query ("SELECT * FROM employee", function (err, res) {
+        db.query ("SELECT employee.first_name, employee.last_name, employee_role.salary, employee_role.title FROM employee INNER JOIN employee_role ON employee.role_id = employee_role.id;", function (err, res) {
           if (err) 
           throw err 
           console.table(res); 
