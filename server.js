@@ -14,7 +14,8 @@ const promptUser = () => {
       message: 'What would like to do ? ',
       choices: ['view all employees', 
                 'view all employees by department',
-                'view all employees by Manager', 
+                'view all roles within each department',
+                'view all employees by Manager',                 
                 'Add employee', 
                 'Remove an employee', 
                 'update employee role',  
@@ -36,6 +37,14 @@ const promptUser = () => {
           console.table(res); 
         })
       }
+      if (answer = 'view all roles within each department') {
+        db.query ("SELECT * FROM employee_role LEFT JOIN department ON employee_role.department_id = department.id", function (err, res) {
+          if (err) 
+          throw err 
+          console.table(res); 
+        })
+      }
+
     })
 };
 
