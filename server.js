@@ -13,10 +13,9 @@ const promptUser = () => {
       name: 'choices',
       message: 'What would like to do ? ',
       choices: ['view all employees', 
-                'view all employees by department',
-                'view all roles within each department',
+                'view all department',
                 'view all the role',                 
-                'view all employees by roles',                 
+                'add a department',                 
                 'Add employee', 
                 'Remove an employee', 
                 'update employee role',  
@@ -30,15 +29,8 @@ const promptUser = () => {
           console.table(res); 
         })
       }
-      else if (answer.choices === 'view all employees by department') { 
-        db.query ("SELECT employee.*, department.name AS Department_Name FROM employee LEFT JOIN department ON employee.role_id = department.id", function (err, res) {
-          if (err) 
-          throw err 
-          console.table(res); 
-        })
-      }
-      else if (answer.choices === 'view all roles within each department') {
-        db.query ("SELECT * FROM employee_role LEFT JOIN department ON employee_role.department_id = department.id", function (err, res) {
+      else if (answer.choices === 'view all department') { 
+        db.query ("SELECT * FROM department", function (err, res) {
           if (err) 
           throw err 
           console.table(res); 
@@ -51,12 +43,8 @@ const promptUser = () => {
           console.table(res); 
         })
       }
-      else if (answer.choices === 'view all employees by roles') {
-        db.query ("SELECT employee.*, employee_role.title AS Title FROM employee LEFT JOIN employee_role ON employee.role_id = employee_role.id", function (err, res) {
-          if (err) 
-          throw err 
-          console.table(res); 
-        })
+      else if (answer.choices === 'add a department') {
+        add_department(); 
       }      
       else if (answer.choices === 'Add employee') {
         add_Employee(); 
@@ -69,6 +57,39 @@ const promptUser = () => {
       }
     })
 };
+
+// function add a department 
+function add_department () {
+  inquirer.prompt([
+    {
+      name: "department_name",
+      type: "input", 
+      message: "Enter the new department ? "
+    }
+  ]).then (answer =>  {
+    const answers = answer.department_name; 
+    db.query (`INSERT INTO department (name)
+    VALUES (?)`, answers)
+    console.log("you added an deparment");
+    promptUser();
+  }); 
+};
+
+function remove_Employee(){ 
+  inquirer.prompt([
+    {
+      name: "id",
+      type: "input", 
+      message: "enter the id of the employee you want to delete? "
+    }
+  ]). then (answer => {
+    console.log(answer.id); 
+    const id = answer.id; 
+    db.query("DELETE FROM employee WHERE id = ?", id) 
+    console.log ("employee deleted"); 
+    promptUser();
+  }); 
+}; 
 
 
 // function adding a new employee 
