@@ -23,25 +23,13 @@ const promptUser = () => {
     }). then( answer => { 
       //console.log(answer.choices); 
       if (answer.choices === 'view all employees') { 
-        db.query ("SELECT employee.first_name, employee.last_name, employee_role.salary, employee_role.title FROM employee INNER JOIN employee_role ON employee.role_id = employee_role.id;", function (err, res) {
-          if (err) 
-          throw err 
-          console.table(res); 
-        })
+        view_employee(); 
       }
       else if (answer.choices === 'view all department') { 
-        db.query ("SELECT * FROM department", function (err, res) {
-          if (err) 
-          throw err 
-          console.table(res); 
-        })
+        view_department(); 
       }
       else if (answer.choices === 'view all the role ') {
-        db.query ("SELECT * FROM employee_role", function (err, res) {
-          if (err) 
-          throw err 
-          console.table(res); 
-        })
+        view_role();
       }
       else if (answer.choices === 'add a department') {
         add_department(); 
@@ -57,7 +45,33 @@ const promptUser = () => {
       }
     })
 };
+//function view all employee 
+function view_employee(){
+  db.query ("SELECT employee.first_name, employee.last_name, employee_role.salary, employee_role.title FROM employee INNER JOIN employee_role ON employee.role_id = employee_role.id;", function (err, res) {
+    if (err) 
+    throw err 
+    console.table(res); 
+    promptUser(); 
+  })
+}; 
 
+//function view all department 
+function view_department (){
+  db.query ("SELECT * FROM department", function (err, res) {
+    if (err) 
+    throw err 
+    console.table(res); 
+  })
+}
+
+//function view all the role 
+function view_role (){
+  db.query ("SELECT * FROM employee_role", function (err, res) {
+    if (err) 
+    throw err 
+    console.table(res); 
+  })
+}; 
 // function add a department 
 function add_department () {
   inquirer.prompt([
